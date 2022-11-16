@@ -1,0 +1,31 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+  
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on: 
+      - db 
+    networks:
+      - default
+    ports: 
+      - "1337:1337"
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
